@@ -14,12 +14,13 @@ close all; clear; clc;
 
 %% program parameters
 %k = 1;  %image number
-path = './images';
-imgFormat = '*.tif';
+path = './fullset';
+imgFormat = '*.jpg';
 
 
 
 %% find images
+tic;
 fprintf("Loading images...\n");
 
 images = dir(fullfile(path,imgFormat));   % array of all images
@@ -42,8 +43,6 @@ suitNames = ["Hearts", "Diamonds", "Clubs", "Spades"];
 
 
 for k=1:numImages
-    tic;
-    
     %% open one image
     fprintf("\nOpening image #%d: %s\n", k,images(k).name);
     orig_img = imread(fullfile(path,images(k).name));
@@ -136,13 +135,8 @@ for k=1:numImages
     % suitSpade = suit_img;
     % fprintf('Saving suit matrix...\n');
     % save('suits.mat','suitSpade', '-append');
-    
-    pause;
 
 end
-
-close all;
-fprintf('\nNo more images to process\n');
 
 %% functions
 
