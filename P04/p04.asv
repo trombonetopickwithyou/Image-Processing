@@ -42,7 +42,7 @@ row = centerRow + cutoffY.*sin(theta);
 H = zeros(numrows, numcols);
 for i=1:numrows
     for j = 1:numcols
-        if(inpolygon(i,j,row,col))  %make a filled in white oval
+        if(inpolygon(i,j,row,col))  %make white 
             H(i,j) = 1;
         end
     end
@@ -67,14 +67,21 @@ F = ifftshift(F);
 out = real(ifft2(F));
 
 
-%% filter image noise (in spatial domain)
-out = medfilt2(out, [3 3]);         %median filter
-out = imadjust(out, [0.25 0.65]);    %adjust contrast
-out = imsharpen(out, 'Radius', 5, 'Amount', 1); %unsharp masking
+%% filter image noise
+out = medfilt2(out, [3 3]);
+out = imadjust(out, [0.25 0.65]);
+out = imsharpen(out, 'Radius', 5, 'Amount', 1);
 
 
 subplot(2,3,3);
-imshow(out);
+imshow(abs(out));
 title('output image');
+
+
+
+%% functions
+function out = dist(x1,y1,x2,y2)
+    out = sqrt((x1-x2).^2 + (y1-y2).^2);
+end
 
 

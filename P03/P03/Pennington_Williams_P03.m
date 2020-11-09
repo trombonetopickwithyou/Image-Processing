@@ -43,16 +43,22 @@ while(1)
     
     %crop and rotate card
     justCard = straightenCrop(gray_img);    %mostly project 2 stuff
+    %imshow(justCard);
+    
+    %subplot(2,2,1); imshow(justCard); title('Straightened Card');
     
     %do object detection on card face
     [allObjects, objectProps] = detectObjs(justCard);           %filter and get objects on card face
     if (size(objectProps, 1) > 1)
         [num_img, suit_img] = findNumSuit(allObjects, objectProps); %find objects for the number and suit
     
+        %subplot(2,2,2); imshow(num_img); title('Number Seen on the Card');
+        %subplot(2,2,3); imshow(suit_img); title('Suit Seen on the Card');
+        
         %determine number
         index = findClosestMatch(num_img, numMasks);%returns which element in "numMasks" is the closest match to "num_img"
         numFinal = numNames(index);
-
+        
         %determine suit
         index = findClosestMatch(suit_img, suitMasks);
         suitFinal = suitNames(index);
@@ -82,8 +88,8 @@ while(1)
             suitCount = 0;
         end
 
-        fprintf('\nGuess: Card is a %s of %s?\n', numFinal, suitFinal);
-        fprintf('numCount: %i, suitCount: %i\n', numCount, suitCount);
+        %fprintf('\nGuess: Card is a %s of %s?\n', numFinal, suitFinal);
+        %fprintf('numCount: %i, suitCount: %i\n', numCount, suitCount);
 
 
         lastNum = numFinal;
