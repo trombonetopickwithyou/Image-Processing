@@ -68,9 +68,11 @@ out = real(ifft2(F));
 
 
 %% filter image noise (in spatial domain)
-out = medfilt2(out, [3 3]);         %median filter
-out = imadjust(out, [0.25 0.65]);    %adjust contrast
-out = imsharpen(out, 'Radius', 5, 'Amount', 1); %unsharp masking
+%out = imadjust(out, [0.45 0.8]);
+out = imadjust(out, [0.25 0.65]);    %adjust contrast ([0-1 lwr bound, 0-1 upr bound])
+
+out = medfilt2(out, [5 5]);                         %median filter
+out = imsharpen(out, 'Radius', 5, 'Amount', 2);   %unsharp masking
 
 
 subplot(2,3,3);
