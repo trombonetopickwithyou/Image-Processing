@@ -1,10 +1,3 @@
-%programming notes:
-%   need to add some sort of way to avoid duplicates...
-%   - maybe go backwards?
-%   - use the previous frame's worms and labels, and find the closest worm
-%     in the future frame that matches it (then remove it from being picked
-%     again?)
-
 close all; clear; clc;
 
 
@@ -67,25 +60,17 @@ while hasFrame(v)
     centroidsX = allCentroids(1:2:end-1);
     centroidsY = allCentroids(2:2:end);
     
-    worms{index}.xpos = centroidsX;
-    worms{index}.ypos = centroidsY;
+    worms{2}.xpos = centroidsX;
+    worms{2}.ypos = centroidsY;
     
     % use x,y coordinates to assign the label
     for i=1:numBlobs
-        worms{index}.label(i) = findClosestWorm(worms{index}.xpos(i), worms{index}.ypos(i), worms{index - 1}.xpos, worms{index - 1}.ypos, worms{index - 1}.label);
+        worms{2}.label = findClosestWorm(worms{2}.xpos(i), worms{2}.ypos(i), worms{1}.xpos, worms{1}.ypos, worms{1}.label);
     end
     
+    worms{1}.xpos = centroidsX;
+    worms{1}.ypos = centroidsY;
     
-    % show image with labels
-    hold on;
-    imshow(img_bin);
-    for i=1:numBlobs   
-        text(worms{index}.xpos(i) + 10, worms{index}.ypos(i), num2str(worms{index}.label(i)), 'Color', 'white');
-    end
-    title(['Number of Worms: ', num2str(numBlobs)]);
-    pause(0);
-    
-    index = index + 1;
 end
 
 
@@ -115,13 +100,11 @@ function label = findClosestWorm(targetX, targetY, oldXs, oldYs, oldLabels)
     
     closest = 1;
     for i=1:numel(oldLabels)
-        if dist(targetX, targetY, oldXs(i), oldYs(i)) < dist(targetX, targetY, oldXs(closest), oldYs(closest))
-            closest = i;
+        if dist(targetX, targetY, oldXs(i), oldYs(i)) < dist(targetX, targetY, oldX)
+            
         end
     end
 
-    label = oldLabels(closest);
-    
 end
 
 function d = dist(x1, y1, x2, y2)
